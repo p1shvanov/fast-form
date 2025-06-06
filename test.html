@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест отправки данных</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест отправки данных в Google Apps Script</h1>
+    
+    <div class="test-container">
+        <h3>Метод 1: FormData</h3>
+        <button onclick="testFormData()">Тест FormData</button>
+        <div id="result1" class="result" style="display: none;"></div>
+    </div>
+    
+    <div class="test-container">
+        <h3>Метод 2: JSON (no-cors)</h3>
+        <button onclick="testJSONNoCors()">Тест JSON no-cors</button>
+        <div id="result2" class="result" style="display: none;"></div>
+    </div>
+    
+    <div class="test-container">
+        <h3>Метод 3: JSON (cors)</h3>
+        <button onclick="testJSONCors()">Тест JSON cors</button>
+        <div id="result3" class="result" style="display: none;"></div>
+    </div>
+    
+    <div class="test-container">
+        <h3>Проверка результатов</h3>
+        <button onclick="checkResults()">Получить результаты</button>
+        <div id="result4" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMV7H46kkRGpYWPBQIofVmBD9Qcg0s6zeg_RjzDbcLsnmDobrYJpfKTrwA828BG8ZOLg/exec';
+        
+        const testData = {
+            timestamp: new Date().toISOString(),
+            answers: {
+                question_1: 'yes',
+                question_2: 'no',
+                question_3: 'yes',
+                question_4: 'no',
+                question_5: 'yes',
+                question_6: 'no',
+                question_7: 'yes',
+                question_8: 'no',
+                question_9: 'yes',
+                question_10: 'no'
+            },
+            feedback: 'Тестовый комментарий'
+        };
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${type}`;
+            element.innerHTML = message;
+        }
+
+        async function testFormData() {
+            const resultId = 'result1';
+            try {
+                showResult(resultId, 'Отправляем данные через FormData...', 'info');
+                
+                const formData = new FormData();
+                formData.append('data', JSON.stringify(testData));
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const responseText = await response.text();
+                console.log('FormData response:', responseText);
+                
+                showResult(resultId, `✅ Успех! Response: <pre>${responseText}</pre>`, 'success');
+                
+            } catch (error) {
+                console.error('FormData error:', error);
+                showResult(resultId, `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function testJSONNoCors() {
+            const resultId = 'result2';
+            try {
+                showResult(resultId, 'Отправляем данные через JSON no-cors...', 'info');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                // no-cors не позволяет читать ответ
+                showResult(resultId, '✅ Данные отправлены (no-cors - ответ недоступен)', 'success');
+                
+            } catch (error) {
+                console.error('JSON no-cors error:', error);
+                showResult(resultId, `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function testJSONCors() {
+            const resultId = 'result3';
+            try {
+                showResult(resultId, 'Отправляем данные через JSON cors...', 'info');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                const responseText = await response.text();
+                console.log('JSON cors response:', responseText);
+                
+                showResult(resultId, `✅ Успех! Response: <pre>${responseText}</pre>`, 'success');
+                
+            } catch (error) {
+                console.error('JSON cors error:', error);
+                showResult(resultId, `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkResults() {
+            const resultId = 'result4';
+            try {
+                showResult(resultId, 'Получаем результаты...', 'info');
+                
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults`);
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const responseText = await response.text();
+                console.log('Raw response text:', responseText);
+                
+                const data = JSON.parse(responseText);
+                console.log('Parsed data:', data);
+                
+                // Test data structure
+                const isValidStructure = data && 
+                                       typeof data === 'object' && 
+                                       Array.isArray(data.responses) && 
+                                       typeof data.totalCount === 'number';
+                
+                if (!isValidStructure) {
+                    throw new Error('Invalid data structure received');
+                }
+                
+                showResult(resultId, `✅ Результаты получены! Всего ответов: ${data.totalCount}<br>
+                    Структура данных: ✅ Валидная<br>
+                    Ответов в массиве: ${data.responses.length}<br>
+                    <details><summary>Показать данные</summary><pre>${JSON.stringify(data, null, 2)}</pre></details>`, 'success');
+                
+            } catch (error) {
+                console.error('Results error:', error);
+                showResult(resultId, `❌ Ошибка: ${error.message}<br>
+                    Проверьте консоль для подробностей`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

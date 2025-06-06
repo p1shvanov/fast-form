@@ -22,7 +22,35 @@ const CONFIG = {
  */
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    console.log('Received POST request');
+    console.log('postData:', e.postData);
+    console.log('parameters:', e.parameter);
+    
+    let data;
+    
+    // Handle different types of requests
+    if (e.postData && e.postData.contents) {
+      // Direct JSON in body
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch (parseError) {
+        console.error('Failed to parse JSON from contents:', parseError);
+        throw new Error('Invalid JSON format');
+      }
+    } else if (e.parameter && e.parameter.data) {
+      // FormData with 'data' parameter
+      try {
+        data = JSON.parse(e.parameter.data);
+      } catch (parseError) {
+        console.error('Failed to parse JSON from parameter:', parseError);
+        throw new Error('Invalid JSON format in parameter');
+      }
+    } else {
+      console.error('No valid data found in request');
+      throw new Error('No data found in request');
+    }
+    
+    console.log('Parsed data:', data);
     
     // Validate and sanitize data
     const validatedData = validateSurveyData(data);

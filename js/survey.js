@@ -5,7 +5,7 @@ let isSubmitting = false;
 
 // Configuration
 const CONFIG = {
-    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzRO43hC0nYnFkgKi4YVgcZecITkxAUKr_B81SAOeLY47faKQ2danBOVBIDT4xjSKWKbQ/exec', // Replace with actual Google Apps Script URL
+    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbymL7bS72Qdn1TbmnRZxpEhkbwaz6NeUz8WP4rOMYXqQhJy0RJ-AmSVO09sWiY4s2HtTQ/exec', // Replace with actual Google Apps Script URL
     MAX_RETRIES: 3,
     RETRY_DELAY: 1000
 };
@@ -215,27 +215,62 @@ function collectFormData() {
 // Submit data to Google Sheets
 async function submitToGoogleSheets(data, retryCount = 0) {
     try {
+        console.log('Submitting data:', data);
+        
+        // Create form data for Google Apps Script
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        
         const response = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
+            body: formData
         });
         
-        // Note: no-cors mode means we can't read the response
-        // We assume success if no error is thrown
         console.log('Data submitted successfully');
         
     } catch (error) {
         console.error('Submission error:', error);
         
-        // Retry logic
+        // Retry with alternative method
         if (retryCount < CONFIG.MAX_RETRIES) {
             console.log(`Retrying submission (attempt ${retryCount + 1}/${CONFIG.MAX_RETRIES})`);
             await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
+            
+            // Try alternative method on retry
+            if (retryCount > 0) {
+                return submitToGoogleSheetsAlternative(data, retryCount);
+            }
+            
             return submitToGoogleSheets(data, retryCount + 1);
+        }
+        
+        throw error;
+    }
+}
+
+// Alternative submission method
+async function submitToGoogleSheetsAlternative(data, retryCount = 0) {
+    try {
+        console.log('Trying alternative submission method');
+        
+        const response = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        console.log('Alternative method succeeded');
+        
+    } catch (error) {
+        console.error('Alternative method failed:', error);
+        
+        if (retryCount < CONFIG.MAX_RETRIES) {
+            console.log(`Retrying alternative method (attempt ${retryCount + 1}/${CONFIG.MAX_RETRIES})`);
+            await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
+            return submitToGoogleSheetsAlternative(data, retryCount + 1);
         }
         
         throw error;
