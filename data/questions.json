@@ -1,0 +1,75 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "textRu": "Вопрос 1",
+      "textEn": "Question 1",
+      "required": true
+    },
+    {
+      "id": 2,
+      "textRu": "Вопрос 2",
+      "textEn": "Question 2",
+      "required": true
+    },
+    {
+      "id": 3,
+      "textRu": "Вопрос 3",
+      "textEn": "Question 3",
+      "required": true
+    },
+    {
+      "id": 4,
+      "textRu": "Вопрос 4",
+      "textEn": "Question 4",
+      "required": true
+    },
+    {
+      "id": 5,
+      "textRu": "Вопрос 5",
+      "textEn": "Question 5",
+      "required": true
+    },
+    {
+      "id": 6,
+      "textRu": "Вопрос 6",
+      "textEn": "Question 6",
+      "required": true
+    },
+    {
+      "id": 7,
+      "textRu": "Вопрос 7",
+      "textEn": "Question 7",
+      "required": true
+    },
+    {
+      "id": 8,
+      "textRu": "Вопрос 8",
+      "textEn": "Question 8",
+      "required": true
+    },
+    {
+      "id": 9,
+      "textRu": "Вопрос 9",
+      "textEn": "Question 9",
+      "required": true
+    },
+    {
+      "id": 10,
+      "textRu": "Вопрос 10",
+      "textEn": "Question 10",
+      "required": true
+    }
+  ],
+  "options": {
+    "yesRu": "Да",
+    "noRu": "Нет",
+    "yesEn": "Yes",
+    "noEn": "No"
+  },
+  "feedbackQuestion": {
+    "textRu": "Ваши пожелания и предложения:",
+    "textEn": "Your suggestions and feedback:",
+    "required": true
+  }
+} 

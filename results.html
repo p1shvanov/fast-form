@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты опроса | Survey Results</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="language-toggle">
+                <button id="langToggle" class="lang-btn">EN</button>
+            </div>
+            <h1 class="title" data-ru="Результаты опроса" data-en="Survey Results">Результаты опроса</h1>
+            <div class="results-meta">
+                <p class="total-responses" data-ru="Всего ответов:" data-en="Total responses:">
+                    Всего ответов: <span id="totalResponses">0</span>
+                </p>
+                <button id="refreshBtn" class="refresh-btn" data-ru="Обновить данные" data-en="Refresh Data">
+                    Обновить данные
+                </button>
+            </div>
+        </header>
+
+        <main class="main">
+            <div id="loadingResults" class="loading-message">
+                <div class="spinner"></div>
+                <p data-ru="Загружаем результаты..." data-en="Loading results...">Загружаем результаты...</p>
+            </div>
+
+            <div id="resultsContainer" class="results-container" style="display: none;">
+                <div id="questionsResults" class="questions-results">
+                    <!-- Results will be loaded dynamically -->
+                </div>
+
+                <div class="feedback-section">
+                    <h2 class="section-title" data-ru="Пожелания и предложения" data-en="Suggestions and Feedback">
+                        Пожелания и предложения
+                    </h2>
+                    <div id="feedbackResults" class="feedback-results">
+                        <!-- Feedback will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none;">
+                <div class="error-icon">⚠</div>
+                <h2 data-ru="Ошибка загрузки" data-en="Loading Error">Ошибка загрузки</h2>
+                <p data-ru="Не удалось загрузить результаты. Попробуйте обновить страницу." data-en="Failed to load results. Please try refreshing the page.">
+                    Не удалось загрузить результаты. Попробуйте обновить страницу.
+                </p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="index.html" class="back-link" data-ru="← Вернуться к опросу" data-en="← Back to Survey">
+                ← Вернуться к опросу
+            </a>
+        </footer>
+    </div>
+
+    <script src="js/results.js"></script>
+</body>
+</html> 

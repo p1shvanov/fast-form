@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивный опрос | Interactive Survey</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="language-toggle">
+                <button id="langToggle" class="lang-btn">EN</button>
+            </div>
+            <h1 class="title" data-ru="Интерактивный опрос" data-en="Interactive Survey">Интерактивный опрос</h1>
+            <p class="subtitle" data-ru="Ваше мнение важно для нас" data-en="Your opinion matters to us">Ваше мнение важно для нас</p>
+        </header>
+
+        <main class="main">
+            <form id="surveyForm" class="survey-form">
+                <div id="questionsContainer" class="questions-container">
+                    <!-- Questions will be loaded dynamically -->
+                </div>
+
+                <div class="question-block">
+                    <label class="question-label" data-ru="Ваши пожелания и предложения:" data-en="Your suggestions and feedback:">
+                        Ваши пожелания и предложения:
+                    </label>
+                    <textarea 
+                        id="feedback" 
+                        name="feedback" 
+                        class="feedback-textarea" 
+                        maxlength="200" 
+                        placeholder="Введите ваши комментарии (максимум 200 символов)"
+                        data-placeholder-ru="Введите ваши комментарии (максимум 200 символов)"
+                        data-placeholder-en="Enter your comments (maximum 200 characters)"
+                        required
+                    ></textarea>
+                    <div class="char-counter">
+                        <span id="charCount">0</span>/200
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" data-ru="Отправить ответы" data-en="Submit Answers">
+                    Отправить ответы
+                </button>
+            </form>
+
+            <div id="loadingMessage" class="loading-message" style="display: none;">
+                <div class="spinner"></div>
+                <p data-ru="Отправляем ваши ответы..." data-en="Submitting your answers...">Отправляем ваши ответы...</p>
+            </div>
+
+            <div id="successMessage" class="success-message" style="display: none;">
+                <div class="success-icon">✓</div>
+                <h2 data-ru="Спасибо за участие!" data-en="Thank you for participating!">Спасибо за участие!</h2>
+                <p data-ru="Ваши ответы успешно отправлены" data-en="Your answers have been submitted successfully">Ваши ответы успешно отправлены</p>
+                <a href="results.html" class="results-link" data-ru="Посмотреть результаты" data-en="View Results">Посмотреть результаты</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/survey.js"></script>
+</body>
+</html> 
